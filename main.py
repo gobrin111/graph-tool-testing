@@ -94,7 +94,7 @@ def createGraph(txt):
                     preNode = currentNode
     return g
 
-g = createGraph('1000x1000.txt')
+g = createGraph('4x4.txt')
 
 # print((time.time()-start_time))
 # print(g.num_vertices)
@@ -144,8 +144,23 @@ g.vertex_properties["vprop"] = vprop
 interprop = g.vertex_properties["vprop"]
 
 distBFS = g.new_vertex_property("int")
-predBFS = g.new_vertex_property("int64_t")
+predBFS = g.new_vertex_property("int64_t",-1)
 graph_tool.search.bfs_search(g,stuff["bot"],VisitorExample(interprop,predBFS,distBFS))
+def get_path(predecessor_map, start, end):
+    path = []
+    current = end
+    while current != start and current != -1:
+        path.append(current)
+        current = predecessor_map[g.vertex(current)]
+    if current == start:
+        path.append(start)
+    return path[::-1]
+BFSpath = {}
+for v in g.vertices():
+    path = get_path(predecessor_map=predBFS, start=0, end=int(v))
+    BFSpath[v] = path
+
+print(BFSpath)
 
 # print(time.time()-bfstime)
 # snapshot2 = tracemalloc.take_snapshot()
@@ -156,16 +171,16 @@ graph_tool.search.bfs_search(g,stuff["bot"],VisitorExample(interprop,predBFS,dis
 
 
 '''********* Shortest path **********'''
-tracemalloc.start()
-snap1 = tracemalloc.take_snapshot()
-start = time.time()
+# tracemalloc.start()
+# snap1 = tracemalloc.take_snapshot()
+# start = time.time()
 dist, pred = graph_tool.search.dijkstra_search(g,stuff["weight"],stuff["bot"])
-print(time.time()-start)
-snap2 = tracemalloc.take_snapshot()
-stats = snap2.compare_to(snap1,'lineno')
-for stat in stats[:5]:
-    print(stat)
-print(dist.a)
+# print(time.time()-start)
+# snap2 = tracemalloc.take_snapshot()
+# stats = snap2.compare_to(snap1,'lineno')
+# for stat in stats[:5]:
+#     print(stat)
+# print(dist.a)
 
 
 
