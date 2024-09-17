@@ -97,24 +97,31 @@ def createGraph(txt):
 g = createGraph('4x4.txt')
 
 # print((time.time()-start_time))
-# print(g.num_vertices)
+print(g.num_vertices)
 
 '''********* Filtering the Graph **********'''
 def edge_filter(e):
+    if(g.vertex_properties["color"][e.source()]==10 or g.vertex_properties["color"][e.target()]==10):
+        return True
+    if(g.vertex_properties["color"][e.target()]==11 or g.vertex_properties["color"][e.source()]==11):
+        return True
     return g.vertex_properties["color"][e.source()] == g.vertex_properties["color"][e.target()]
 
 def vertex_filter(v):
     return True
+    
 
 # filter_time = time.time()
 g_filtered = graph_tool.GraphView(g, vfilt=vertex_filter, efilt=edge_filter)
+print(g_filtered.num_vertices)
+
 
 # # print(time.time()-filter_time)
 
 
 # print(g_filtered.num_edges)
-# # for edge in g_filtered.edges():
-# #     print(edge)
+# for edge in g_filtered.edges():
+#     print(edge)
 
 '''********* BFS **********'''
 # tracemalloc.start()
@@ -129,23 +136,23 @@ class VisitorExample(graph_tool.search.BFSVisitor):
         self.dist = dist
 
     def discover_vertex(self, u):
-        # print("-->", self.name[u], "has been discovered!")
+        print("-->", self.name[u], "has been discovered!")
         return
 
     def examine_vertex(self, u):
-        # print(self.name[u], "has been examined...")
+        print(self.name[u], "has been examined...")
         return
 
     def tree_edge(self, e):
         self.pred[e.target()] = int(e.source())
         self.dist[e.target()] = self.dist[e.source()] + 1
-vprop = g.new_vertex_property("int")
-g.vertex_properties["vprop"] = vprop
-interprop = g.vertex_properties["vprop"]
+vprop = g_filtered.new_vertex_property("int")
+g_filtered.vertex_properties["vprop"] = vprop
+interprop = g_filtered.vertex_properties["vprop"]
 
-distBFS = g.new_vertex_property("int")
-predBFS = g.new_vertex_property("int64_t",-1)
-graph_tool.search.bfs_search(g,stuff["bot"],VisitorExample(interprop,predBFS,distBFS))
+distBFS = g_filtered.new_vertex_property("int")
+predBFS = g_filtered.new_vertex_property("int64_t",-1)
+graph_tool.search.bfs_search(g_filtered,stuff["bot"],VisitorExample(interprop,predBFS,distBFS))
 def get_path(predecessor_map, start, end):
     path = []
     current = end
@@ -156,7 +163,7 @@ def get_path(predecessor_map, start, end):
         path.append(start)
     return path[::-1]
 BFSpath = {}
-for v in g.vertices():
+for v in g_filtered.vertices():
     path = get_path(predecessor_map=predBFS, start=0, end=int(v))
     BFSpath[v] = path
 
@@ -174,7 +181,8 @@ print(BFSpath)
 # tracemalloc.start()
 # snap1 = tracemalloc.take_snapshot()
 # start = time.time()
-dist, pred = graph_tool.search.dijkstra_search(g,stuff["weight"],stuff["bot"])
+
+# dist, pred = graph_tool.search.dijkstra_search(g,stuff["weight"],stuff["bot"])
 # print(time.time()-start)
 # snap2 = tracemalloc.take_snapshot()
 # stats = snap2.compare_to(snap1,'lineno')
