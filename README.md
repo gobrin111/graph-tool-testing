@@ -41,9 +41,8 @@ Note: This method of installation doesn't work well within virtual machines, sin
 <br>
 <br>
 <h2>MacOS X installation method</h2><br>
-<br>
 Homebrew<br>
-With [Homebrew](https://brew.sh/)the installation is also straightforward, since a [formula](https://formulae.brew.sh/formula/graph-tool) for it is included in the main repository:<br>
+With [Homebrew](https://brew.sh/) the installation is also straightforward, since a [formula](https://formulae.brew.sh/formula/graph-tool) for it is included in the main repository:<br>
 
 ```markdown
 port install py-graph-tool
