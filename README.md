@@ -42,9 +42,9 @@ sudo apt-get install python3-graph-tool
 Note: This method of installation doesn't work well within virtual machines, since you have to manually add the system packages.
 <br>
 <br>
-MacOS X installation method:<br>
+<h2>MacOS X installation method</h2><br>
 <br>
-<h1>Homebrew</h1><br>
+<h2>Homebrew</h2><br>
 With [Homebrew](https://brew.sh/)the installation is also straightforward, since a [formula](https://formulae.brew.sh/formula/graph-tool) for it is included in the main repository:<br>
 ```markdown
 port install py-graph-tool
