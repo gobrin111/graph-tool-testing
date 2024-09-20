@@ -39,3 +39,4 @@ Finally, the package itself can be installed via:
 ```markdwon
 sudo apt-get install python3-graph-tool
 ```
+Note: This method of installation doesn't work well within virtual machines, since you have to manually add the system packages.
