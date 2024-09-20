@@ -2,9 +2,7 @@
 
 This repo provides the test cases that were used to test the overall runtimes and memory usage of each file.
 
-# Installation Instructions
-
-For windows users:<br>
+# For windows users:
   To use graph-tool on windows, you need to first install Windows Subsystem for Linux(WSL) as described [here](https://learn.microsoft.com/en-us/windows/wsl/install). <br>
   Usually, this requires simply running the command below on the power shell:
 ```markdown
@@ -44,8 +42,9 @@ Note: This method of installation doesn't work well within virtual machines, sin
 <br>
 <h2>MacOS X installation method</h2><br>
 <br>
-<h2>Homebrew</h2><br>
+Homebrew<br>
 With [Homebrew](https://brew.sh/)the installation is also straightforward, since a [formula](https://formulae.brew.sh/formula/graph-tool) for it is included in the main repository:<br>
+
 ```markdown
 port install py-graph-tool
 ```
