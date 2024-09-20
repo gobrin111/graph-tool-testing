@@ -30,3 +30,12 @@ and update the package list:
 ```markdown
 sudo apt-get update
 ```
+To enable all functionalities, the following extra packages need to be installed:
+```markdown
+sudo apt-get install python3-cairo python3-gi-cairo python3-gi gnome pip
+sudo pip install zstandard
+```
+Finally, the package itself can be installed via:
+```markdwon
+sudo apt-get install python3-graph-tool
+```
