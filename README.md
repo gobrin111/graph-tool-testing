@@ -8,9 +8,7 @@ For windows users:
   To use graph-tool on windows, you need to first install Windows Subsystem for Linux(WSL) as described here. https://learn.microsoft.com/en-us/windows/wsl/install
   Usually, this requires simply running the command below on the power shell:
 ```markdown
-```
 wsl --install
-```
 ```
 
 
