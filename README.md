@@ -1,9 +1,16 @@
 # graph-tool-testing
 
-Graph Creation
+This repo provides the test cases that were used to test the overall runtimes and memory usage of each file.
 
-Graph Filtering
+# Installation Instructions
 
-BFS
+For windows users:
+  To use graph-tool on windows, you need to first install Windows Subsystem for Linux(WSL) as described here. https://learn.microsoft.com/en-us/windows/wsl/install
+  Usually, this requires simply running the command below on the power shell:
+```markdown
+```
+wsl --install
+```
+```
 
-Shortest Pathing
+
