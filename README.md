@@ -49,6 +49,13 @@ port install py-graph-tool
 ```
 <br>
 
+#Use Instruction<br>
+While the main file, run this command replacing the "<text file name>" with one of the existing text files in the repo and it will print out all the graph information about it.
+```markdown
+python3 main.py <text file name>
+```
+
+
 
 
 
