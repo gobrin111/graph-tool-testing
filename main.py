@@ -1,9 +1,5 @@
 from graph_tool.all import *
-
 import math
-import time
-import tracemalloc
-
 # import cairo
 # import graphviz
 # import os
@@ -13,22 +9,29 @@ import tracemalloc
 # import graph_tool.draw
 # print(f"{dir(graph_tool.draw)}")
 # from graph_tool.draw import graph_draw
+import argparse
+parser = argparse.ArgumentParser(description="Run Python code with user input")
+parser.add_argument("input_value", help="Input value to process")
+args = parser.parse_args()
+args = args.input_value
 
-stuff = {}
+storage = {}
 graph_tool.openmp_enabled()
+currentGraph = {}
 '''********* Graph Creation **********'''
 def createGraph(txt):
     g = graph_tool.Graph(directed=False)
+    currentGraph["graph"] = g
     nodeColor = g.new_vertex_property("int")
     g.vertex_properties["color"] = nodeColor
     eWeight = g.new_edge_property("double")
     bot = g.add_vertex()
-    stuff["bot"] = bot
+    storage["bot"] = bot
     nodeColor[bot] = 10
     top = g.add_vertex()
-    stuff["top"] = top
+    storage["top"] = top
     nodeColor[top] = 11
-    stuff["weight"] = eWeight
+    storage["weight"] = eWeight
     
     with open(txt,'r') as file:
         lines = file.readlines()
@@ -94,41 +97,37 @@ def createGraph(txt):
                     preNode = currentNode
     return g
 
-g = createGraph('4x4.txt')
+g = createGraph(args)
+for edge in g.edges():
+    print(edge,end="")
+print('\n')
 
-# print((time.time()-start_time))
-print(g.num_vertices)
 
 '''********* Filtering the Graph **********'''
 def edge_filter(e):
-    if(g.vertex_properties["color"][e.source()]==10 or g.vertex_properties["color"][e.target()]==10):
+    if(currentGraph["graph"].vertex_properties["color"][e.source()]==10 or currentGraph["graph"].vertex_properties["color"][e.target()]==10):
         return True
-    if(g.vertex_properties["color"][e.target()]==11 or g.vertex_properties["color"][e.source()]==11):
+    if(currentGraph["graph"].vertex_properties["color"][e.target()]==11 or currentGraph["graph"].vertex_properties["color"][e.source()]==11):
         return True
-    return g.vertex_properties["color"][e.source()] == g.vertex_properties["color"][e.target()]
+    return currentGraph["graph"].vertex_properties["color"][e.source()] == currentGraph["graph"].vertex_properties["color"][e.target()]
 
 def vertex_filter(v):
     return True
     
 
-# filter_time = time.time()
+print("filtered graph edges:")
 g_filtered = graph_tool.GraphView(g, vfilt=vertex_filter, efilt=edge_filter)
-print(g_filtered.num_vertices)
-
-
-# # print(time.time()-filter_time)
-
+for edge in g_filtered.edges():
+    print(edge, end="")
+print('\r\n')
 
 # print(g_filtered.num_edges)
 # for edge in g_filtered.edges():
 #     print(edge)
 
 '''********* BFS **********'''
-# tracemalloc.start()
-# snapshot1 = tracemalloc.take_snapshot()
-# bfstime = time.time()
 
-class VisitorExample(graph_tool.search.BFSVisitor):
+class VisitorExample(graph_tool.search.BFSVisitor): #this class 
 
     def __init__(self, name, pred, dist):
         self.name = name
@@ -136,11 +135,11 @@ class VisitorExample(graph_tool.search.BFSVisitor):
         self.dist = dist
 
     def discover_vertex(self, u):
-        print("-->", self.name[u], "has been discovered!")
+        # print("-->", self.name[u], "has been discovered!")
         return
 
     def examine_vertex(self, u):
-        print(self.name[u], "has been examined...")
+        # print(self.name[u], "has been examined...")
         return
 
     def tree_edge(self, e):
@@ -149,10 +148,9 @@ class VisitorExample(graph_tool.search.BFSVisitor):
 vprop = g_filtered.new_vertex_property("int")
 g_filtered.vertex_properties["vprop"] = vprop
 interprop = g_filtered.vertex_properties["vprop"]
-
 distBFS = g_filtered.new_vertex_property("int")
 predBFS = g_filtered.new_vertex_property("int64_t",-1)
-graph_tool.search.bfs_search(g_filtered,stuff["bot"],VisitorExample(interprop,predBFS,distBFS))
+graph_tool.search.bfs_search(g_filtered,storage["bot"],VisitorExample(interprop,predBFS,distBFS))
 def get_path(predecessor_map, start, end):
     path = []
     current = end
@@ -165,34 +163,16 @@ def get_path(predecessor_map, start, end):
 BFSpath = {}
 for v in g_filtered.vertices():
     path = get_path(predecessor_map=predBFS, start=0, end=int(v))
-    BFSpath[v] = path
-
+    BFSpath[int(v)] = path
+print("bfs - pathing")
 print(BFSpath)
-
-# print(time.time()-bfstime)
-# snapshot2 = tracemalloc.take_snapshot()
-# stats = snapshot2.compare_to(snapshot1, 'lineno')
-# for stat in stats[:5]:  # Limit to top 5 results
-#     print(stat)
 # print(distBFS.a)
 
 
-'''********* Shortest path **********'''
-# tracemalloc.start()
-# snap1 = tracemalloc.take_snapshot()
-# start = time.time()
-
-# dist, pred = graph_tool.search.dijkstra_search(g,stuff["weight"],stuff["bot"])
-# print(time.time()-start)
-# snap2 = tracemalloc.take_snapshot()
-# stats = snap2.compare_to(snap1,'lineno')
-# for stat in stats[:5]:
-#     print(stat)
-# print(dist.a)
 
 
 
-
+print(11111111111111111111111111111111111111)
 
 
         
